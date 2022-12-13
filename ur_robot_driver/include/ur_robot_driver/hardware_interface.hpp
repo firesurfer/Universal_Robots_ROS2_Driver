@@ -140,7 +140,9 @@ protected:
   urcl::vector6d_t urcl_joint_velocities_;
   urcl::vector6d_t urcl_joint_efforts_;
   urcl::vector6d_t urcl_ft_sensor_measurements_;
+  urcl::vector6d_t urcl_tcp_force_;
   urcl::vector6d_t urcl_tcp_pose_;
+  urcl::vector6d_t urcl_tcp_velocity_;
 
   bool packet_read_;
 

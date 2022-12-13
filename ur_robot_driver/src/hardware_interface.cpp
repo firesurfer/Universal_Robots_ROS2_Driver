@@ -168,6 +168,21 @@ std::vector<hardware_interface::StateInterface> URPositionHardwareInterface::exp
     }
   }
 
+  //Helper method for exposing 6d states
+  auto build_6_d_state = [&state_interfaces](const std::string& prefix_name,urcl::vector6d_t & data) {
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"x", &data.at(0)));
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"y", &data.at(1)));
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"z", &data.at(2)));
+
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"r", &data.at(3)));
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"p", &data.at(4)));
+          state_interfaces.emplace_back(hardware_interface::StateInterface(prefix_name,"y", &data.at(5)));
+  };
+
+  build_6_d_state(prefix + "actual_tcp_pose", urcl_tcp_pose_);
+  build_6_d_state(prefix + "actual_tcp_velocity", urcl_tcp_velocity_);
+  build_6_d_state(prefix + "actual_tcp_force", urcl_tcp_force_);
+
 
 
   for (size_t i = 0; i < 18; ++i) {
@@ -513,7 +528,10 @@ hardware_interface::return_type URPositionHardwareInterface::read(const rclcpp::
     readData(data_pkg, "speed_scaling", speed_scaling_);
     readData(data_pkg, "runtime_state", runtime_state_);
     readData(data_pkg, "actual_TCP_force", urcl_ft_sensor_measurements_);
+    //Copy them before transforming them
+    urcl_tcp_force_ = urcl_ft_sensor_measurements_;
     readData(data_pkg, "actual_TCP_pose", urcl_tcp_pose_);
+    readData(data_pkg, "actual_TCP_speed", urcl_tcp_velocity_);
     readData(data_pkg, "standard_analog_input0", standard_analog_input_[0]);
     readData(data_pkg, "standard_analog_input1", standard_analog_input_[1]);
     readData(data_pkg, "standard_analog_output0", standard_analog_output_[0]);
