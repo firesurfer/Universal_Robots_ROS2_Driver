@@ -55,6 +55,13 @@ namespace rtde = urcl::rtde_interface;
 namespace ur_robot_driver
 {
 
+URPositionHardwareInterface::~URPositionHardwareInterface()
+{
+  // If the controller manager is shutdown via Ctrl + C the on_deactivate methods won't be called.
+  // We therefore need to make sure to actually deactivate the communication
+  on_deactivate(rclcpp_lifecycle::State());
+}
+
 hardware_interface::CallbackReturn
 URPositionHardwareInterface::on_init(const hardware_interface::HardwareInfo& system_info)
 {
@@ -444,6 +451,8 @@ URPositionHardwareInterface::on_activate(const rclcpp_lifecycle::State& previous
                         "[https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/blob/main/ur_calibration/"
                         "README.md] for details.");
   }
+
+
 
   async_thread_ = std::make_shared<std::thread>(&URPositionHardwareInterface::asyncThread, this);
 
