@@ -72,7 +72,15 @@ controller_interface::CallbackReturn ScaledJointTrajectoryController::on_activat
 
     scaling_factor_sub_ = get_node()->create_subscription<ScalingFactorMsg>(
         scaled_params_.speed_scaling_topic_name, qos,
-        [&](const ScalingFactorMsg& msg) { scaling_factor_ = std::clamp(msg.data / 100.0, 0.0, 1.0); });
+        [&](const ScalingFactorMsg& msg) { 
+            //Allow to set scaling factor > 100% for simulation purposes
+            if(!scaled_params_.speed_scaling_sim_mode){
+              scaling_factor_ = std::clamp(msg.data / 100.0, 0.0, 1.0);
+            }
+            else {
+              scaling_factor_ = msg.data / 100.0;
+            } 
+          });
   }
 
   TimeData time_data;
