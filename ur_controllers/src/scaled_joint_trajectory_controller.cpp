@@ -72,7 +72,7 @@ controller_interface::CallbackReturn ScaledJointTrajectoryController::on_activat
 
     scaling_factor_sub_ = get_node()->create_subscription<ScalingFactorMsg>(
         scaled_params_.speed_scaling_topic_name, qos,
-        [&](const ScalingFactorMsg& msg) { scaling_factor_ = msg.data; });
+        [&](const ScalingFactorMsg& msg) { scaling_factor_ = msg.data/100.0; });
   }
 
   TimeData time_data;
