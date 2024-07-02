@@ -203,14 +203,14 @@ controller_interface::return_type ScaledJointTrajectoryController::update(const 
         // Always check the state tolerance on the first sample in case the first sample
         // is the last point
         if ((before_last_point || first_sample) &&
-            !check_state_tolerance_per_joint(state_error_, index, default_tolerances_.state_tolerance[index], false) &&
+            !check_state_tolerance_per_joint(state_error_, index, default_tolerances_.state_tolerance[index], true) &&
             *(rt_is_holding_.readFromRT()) == false) {
           tolerance_violated_while_moving = true;
         }
         // past the final point, check that we end up inside goal tolerance
         if (!before_last_point &&
             !check_state_tolerance_per_joint(state_error_, index, default_tolerances_.goal_state_tolerance[index],
-                                             false) &&
+                                             true) &&
             *(rt_is_holding_.readFromRT()) == false) {
           outside_goal_tolerance = true;
 
