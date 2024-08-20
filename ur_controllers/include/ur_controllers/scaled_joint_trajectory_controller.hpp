@@ -84,6 +84,8 @@ private:
   scaled_joint_trajectory_controller::Params scaled_params_;
 
   rclcpp::Subscription<ScalingFactorMsg>::SharedPtr scaling_factor_sub_;
+
+  int states_outside_of_tolerance = 0;
 };
 }  // namespace ur_controllers
 

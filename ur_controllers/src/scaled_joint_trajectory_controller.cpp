@@ -158,6 +158,7 @@ controller_interface::return_type ScaledJointTrajectoryController::update(const 
     bool first_sample = false;
     // if sampling the first time, set the point before you sample
     if (!traj_external_point_ptr_->is_sampled_already()) {
+      states_outside_of_tolerance = 0;
       first_sample = true;
       if (params_.open_loop_control) {
         traj_external_point_ptr_->set_point_before_trajectory_msg(traj_time, last_commanded_state_);
@@ -205,7 +206,9 @@ controller_interface::return_type ScaledJointTrajectoryController::update(const 
         if ((before_last_point || first_sample) &&
             !check_state_tolerance_per_joint(state_error_, index, default_tolerances_.state_tolerance[index], true) &&
             *(rt_is_holding_.readFromRT()) == false) {
-          tolerance_violated_while_moving = true;
+              states_outside_of_tolerance++;
+          if(states_outside_of_tolerance > scaled_params_.allowed_state_tolerance_failures){
+          tolerance_violated_while_moving = true;}
         }
         // past the final point, check that we end up inside goal tolerance
         if (!before_last_point &&
