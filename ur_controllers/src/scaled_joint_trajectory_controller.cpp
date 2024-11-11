@@ -95,7 +95,7 @@ controller_interface::return_type ScaledJointTrajectoryController::update(const 
     }
   }
 
-  if (get_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE) {
+  if (get_lifecycle_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE) {
     return controller_interface::return_type::OK;
   }
 
