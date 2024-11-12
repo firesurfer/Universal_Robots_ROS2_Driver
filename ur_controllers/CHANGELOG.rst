@@ -2,6 +2,53 @@
 Changelog for package ur_controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.13 (2024-10-28)
+-------------------
+* [SJTC] Make scaling interface optional (`#1145 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/1145>`_)
+* Contributors: Felix Exner (fexner)
+
+2.4.12 (2024-10-14)
+-------------------
+
+2.4.11 (2024-10-10)
+-------------------
+* Allow setting the analog output domain when setting an analog IO (`#1123 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/1123>`_)
+* Service to get software version of robot (`#964 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/964>`_)
+* Improve usage documentation (`#1110 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/1110>`_)
+* Contributors: Felix Exner (fexner), URJala, Rune Søe-Knudsen
+
+2.4.10 (2024-09-11)
+-------------------
+* Updated get_state to get_lifecycle_state (`#1087 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/1087>`_)
+* Update maintainers team (`#1088 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/1088>`_)
+* Contributors: Vincenzo Di Pentima
+
+2.4.9 (2024-08-09)
+------------------
+
+2.4.8 (2024-07-01)
+------------------
+
+2.4.7 (2024-06-19)
+------------------
+
+2.4.6 (2024-06-17)
+------------------
+* this simple fix should fix the goal time violated issue (`#882 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/882>`_)
+* Restructure documentation for full stack documentation (`#984 <https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/issues/984>`_)
+* Contributors: Felix Exner (fexner), Lennart Nachtigall, Vincenzo Di Pentima
+
+2.4.5 (2024-05-16)
+------------------
+* Use latched publishing for robot_mode and safety_mode
+* Contributors: Felix Exner
+
+2.4.4 (2024-04-04)
+------------------
+
+2.4.3 (2024-02-02)
+------------------
+
 2.4.2 (2023-11-23)
 ------------------
 * Update read_state_from_hardware
