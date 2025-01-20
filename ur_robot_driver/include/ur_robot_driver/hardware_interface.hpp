@@ -49,7 +49,6 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "hardware_interface/visibility_control.h"
 
 // UR stuff
 #include "ur_client_library/ur/ur_driver.h"
@@ -78,7 +77,9 @@ enum StoppingInterface
   NONE,
   STOP_POSITION,
   STOP_VELOCITY,
-  STOP_PASSTHROUGH
+  STOP_PASSTHROUGH,
+  STOP_FORCE_MODE,
+  STOP_FREEDRIVE,
 };
 
 // We define our own quaternion to use it as a buffer, since we need to pass pointers to the state
@@ -158,6 +159,8 @@ protected:
   void updateNonDoubleValues();
   void extractToolPose();
   void transformForceTorque();
+  void start_force_mode();
+  void stop_force_mode();
   void check_passthrough_trajectory_controller();
   void trajectory_done_callback(urcl::control::TrajectoryResult result);
   bool has_accelerations(std::vector<std::array<double, 6>> accelerations);
@@ -225,6 +228,13 @@ protected:
   double get_robot_software_version_bugfix_;
   double get_robot_software_version_build_;
 
+  // Freedrive mode controller interface values
+  bool freedrive_activated_;
+  bool freedrive_mode_controller_running_;
+  double freedrive_mode_async_success_;
+  double freedrive_mode_enable_;
+  double freedrive_mode_abort_;
+
   // Passthrough trajectory controller interface values
   double passthrough_trajectory_transfer_state_;
   double passthrough_trajectory_abort_;
@@ -233,10 +243,23 @@ protected:
   urcl::vector6d_t passthrough_trajectory_velocities_;
   urcl::vector6d_t passthrough_trajectory_accelerations_;
   double passthrough_trajectory_time_from_start_;
+
   // payload stuff
   urcl::vector3d_t payload_center_of_gravity_;
   double payload_mass_;
   double payload_async_success_;
+
+  // force mode parameters
+  urcl::vector6d_t force_mode_task_frame_;
+  urcl::vector6d_t force_mode_selection_vector_;
+  urcl::vector6uint32_t force_mode_selection_vector_copy_;
+  urcl::vector6d_t force_mode_wrench_;
+  urcl::vector6d_t force_mode_limits_;
+  double force_mode_type_;
+  double force_mode_async_success_;
+  double force_mode_disable_cmd_;
+  double force_mode_damping_;
+  double force_mode_gain_scaling_;
 
   // copy of non double values
   std::array<double, 18> actual_dig_out_bits_copy_;
@@ -265,10 +288,11 @@ protected:
   double pausing_ramp_up_increment_;
 
   // resources switching aux vars
-  std::vector<uint> stop_modes_;
-  std::vector<std::string> start_modes_;
+  std::vector<std::vector<uint>> stop_modes_;
+  std::vector<std::vector<std::string>> start_modes_;
   bool position_controller_running_;
   bool velocity_controller_running_;
+  bool force_mode_controller_running_ = false;
 
   std::unique_ptr<urcl::UrDriver> ur_driver_;
   std::shared_ptr<std::thread> async_thread_;
@@ -278,6 +302,8 @@ protected:
   urcl::RobotReceiveTimeout receive_timeout_ = urcl::RobotReceiveTimeout::millisec(20);
 
   const std::string PASSTHROUGH_GPIO = "trajectory_passthrough";
+  const std::string FORCE_MODE_GPIO = "force_mode";
+  const std::string FREEDRIVE_MODE_GPIO = "freedrive_mode";
 };
 }  // namespace ur_robot_driver
 
